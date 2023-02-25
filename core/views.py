@@ -33,3 +33,23 @@ def verify_google(request):
     except ValueError:
         # Invalid token
         return Response({'error':"valueerror"})
+
+@api_view(['GET'])
+def listColleges(request):
+    import requests
+
+    url = "https://university-college-list-and-rankings.p.rapidapi.com/api/universities"
+
+    querystring = {"countryCode":"in"}
+
+    headers = {
+        "X-RapidAPI-Key": "f834edffa9msh2e26e78a525559bp1e4006jsn1ab53a8adaa0",
+        "X-RapidAPI-Host": "university-college-list-and-rankings.p.rapidapi.com"
+    }
+
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    response_json=response.json()
+
+    result=response_json['data']['ranking']
+
+    return Response(result)
