@@ -50,6 +50,6 @@ def listColleges(request):
     response = requests.request("GET", url, headers=headers, params=querystring)
     response_json=response.json()
 
-    result=response_json['data']['ranking']
+    result=response_json['data']
 
     return Response(result)
