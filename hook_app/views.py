@@ -12,4 +12,4 @@ def pullGithub(request):
     origin=repo.remotes.origin
 
     origin.pull()
-    return HttpResponse("OK")
+    return HttpResponse("OK Got it")
