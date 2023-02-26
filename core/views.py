@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from core.models import Colleges
+from core.models import Application, Colleges
 # Create your views here.
 
 @api_view(['GET'])
@@ -34,7 +34,27 @@ def verify_google(request):
         return Response({'userid':userid})
     except ValueError:
         # Invalid token
+   
         return Response({'error':"valueerror"})
+
+
+@api_view(['POST'])
+def application(request):
+    if request.method=="POST":
+        name=request.POST['name']
+        email=request.POST['email']
+        whatsapp_number=request.POST['wp_no']
+        college_id=request.POST['college_id']
+        linkedin=request.POST.get('linkedin',None)
+        github=request.POST.get('github',None)
+        question=request.POST['question']
+        meal_type=request.POST['meal_type']
+        tshirt_size=request.POST['tshirt_size']
+
+        Application.objects.create(name=name,email=email,whatsapp_number=whatsapp_number,college=Colleges.objects.get(college_id=college_id),linkedin=linkedin,github=github,question=question,meal_type=meal_type,tshirt_size=tshirt_size)
+
+        return Response({'message':'Created'},status=status.HTTP_201_CREATED)
+
 
 @api_view(['GET'])
 def listColleges(request):
