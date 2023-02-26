@@ -3,13 +3,26 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
-
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.contrib.auth.models import User
 from core.models import Application, Colleges
 # Create your views here.
 
 @api_view(['GET'])
 def home(request):
     return Response({"status":status.HTTP_200_OK})
+
+@api_view(['GET'])
+def sendMail(request):
+    db=User.objects.filter(groups__name="SuperAdmin")
+    if db.exists():
+        for item in db:
+            content=render_to_string('mails/super_admin.html',{'user_name':item.first_name,'user_id':item.username,"password":"devx@2023"})
+            send_mail(subject='Invitation to DevX - GDSC TIU', message=content, from_email='gdsctiu@gmail.com', recipient_list=[item.email], html_message=content)
+    return Response({
+        'ok':db.count()
+    })
 
 @api_view(['GET'])
 def verify_google(request):
@@ -50,10 +63,13 @@ def application(request):
         question=request.POST['question']
         meal_type=request.POST['meal_type']
         tshirt_size=request.POST['tshirt_size']
+        check_email=Application.objects.filter(email=email)
+        if check_email.exists():
+            return Response({"message":"Email Registered Already"},status=status.HTTP_200_OK)
+        else:
+            Application.objects.create(name=name,email=email,whatsapp_number=whatsapp_number,college=Colleges.objects.get(college_id=college_id),linkedin=linkedin,github=github,question=question,meal_type=meal_type,tshirt_size=tshirt_size)
 
-        Application.objects.create(name=name,email=email,whatsapp_number=whatsapp_number,college=Colleges.objects.get(college_id=college_id),linkedin=linkedin,github=github,question=question,meal_type=meal_type,tshirt_size=tshirt_size)
-
-        return Response({'message':'Created'},status=status.HTTP_201_CREATED)
+            return Response({'message':'Created'},status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])

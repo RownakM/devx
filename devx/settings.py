@@ -77,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.custom_context.site_globals'
             ],
         },
     },
@@ -158,3 +159,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS_ALLOWED_ORIGINS=['https://devx.fly.dev/']
 CORS_ALLOW_ALL_ORIGINS=True
 CSRF_TRUSTED_ORIGINS = ['https://*.fly.dev']
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'gdsctiu@gmail.com'
+# EMAIL_HOST_PASSWORD = 'Rownak@10'
+EMAIL_HOST_PASSWORD = 'gcomgbxcybxzjpak'

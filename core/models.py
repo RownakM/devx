@@ -28,3 +28,16 @@ class Application(models.Model):
     tshirt_size=models.CharField(max_length=1000)
     status=models.CharField(max_length=1000,choices=STATUS_CHOICES,default="Pending")
     created_date=models.DateTimeField(auto_now_add=True)
+
+PAYMENT_STATUS=(
+    ('Pending','Pending'),
+    ('Done','Done')
+
+)
+
+class Payment(models.Model):
+    application_id=models.ForeignKey(Application,on_delete=models.CASCADE)
+    payment_method=models.CharField(max_length=1000)
+    amount=models.IntegerField()
+    status=models.CharField(max_length=1000,choices=PAYMENT_STATUS,default="Pending")
+    payment_date=models.DateTimeField(auto_now_add=True)
