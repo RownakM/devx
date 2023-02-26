@@ -18,6 +18,9 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('admin_tools_stats/', include('admin_tools_stats.urls')),
     # path('site-update/',include('hook_app.urls')),
-    path('api/',include('core.urls'))
+    path('api/',include('core.urls')),
+    path('', include('admin_soft.urls')),
 ]
+
