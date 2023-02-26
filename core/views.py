@@ -3,6 +3,8 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
+
+from core.models import Colleges
 # Create your views here.
 
 @api_view(['GET'])
@@ -50,6 +52,10 @@ def listColleges(request):
     response = requests.request("GET", url, headers=headers, params=querystring)
     response_json=response.json()
 
-    result=response_json['data']
+    result=response_json['data']['rankings']
 
-    return Response(result)
+    for i in range(1,len(result)):
+        db=result[str(i)]
+        Colleges.objects.create(college_id=db["id"],location=db["location"],name=db["name"])
+
+    return Response({"OK":"OK"})

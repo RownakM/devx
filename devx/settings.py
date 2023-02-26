@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,16 +25,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#q)tvq((i9rqs=gar)wkk19+dqlqqj8mf%x-0cz3fd(g=3jzrt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
-HOOK_APP=[
-    'hook_app'
-    ]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,12 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'core'
-]+HOOK_APP
+    'core',
+    'corsheaders'
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -87,16 +89,20 @@ if DEBUG:
 else:
 
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'devx$default',
-            'USER': 'devx',
-            'HOST': 'devx.mysql.pythonanywhere-services.com',
-            'PASSWORD':'00912693_gdsctiu',
-            # 'PORT': '3306'
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.postgresql',
+        #     'NAME': 'postgres',
+        #     'USER': 'postgres',
+        #     'HOST': 'fdaa:1:762a:0:1::2',
+        #     'PASSWORD':'lKjC6F6L2exs9UG',
+        #     'PORT':5433
+        #     # 'PORT': '3306'
 
 
-        }
+        # }
+        'default': dj_database_url.config(
+            default="postgres://devx:E8ijkHOICHzP6Ba@[fdaa:1:762a:0:1::2]:5432/devx"
+        )
     }
 
 
@@ -140,3 +146,7 @@ STATIC_ROOT=os.path.join(BASE_DIR,'static/')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS_ALLOWED_ORIGINS=['https://devx.fly.dev/']
+CORS_ALLOW_ALL_ORIGINS=True
+CSRF_TRUSTED_ORIGINS = ['https://*.fly.dev']
